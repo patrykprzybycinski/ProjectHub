@@ -13,6 +13,15 @@ abstract class AppController
         }
 
         extract($variables, EXTR_SKIP);
-        require $templatePath;
+
+        ob_start();
+        try {
+            require $templatePath;
+            $content = ob_get_contents();
+        } finally {
+            ob_end_clean();
+        }
+
+        require __DIR__ . '/../../public/views/layout.html.php';
     }
 }

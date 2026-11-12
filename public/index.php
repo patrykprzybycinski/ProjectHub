@@ -14,6 +14,8 @@ $routing->get('/projects', ProjectController::class, 'index');
 $routing->get('/projects/{id}', ProjectController::class, 'show');
 $routing->get('/', DefaultController::class, 'index');
 $routing->get('/dashboard', DashboardController::class, 'index');
+$routing->get('/tasks', DashboardController::class, 'tasks');
+$routing->get('/time', DashboardController::class, 'time');
 
 $routeFound = $routing->dispatch(
     $_SERVER['REQUEST_METHOD'],

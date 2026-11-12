@@ -10,6 +10,7 @@ final class ProjectController extends AppController
     {
         $this->render('projects', [
             'pageTitle' => 'Projekty',
+            'workspaceSection' => '/projects',
         ]);
     }
 
@@ -17,6 +18,7 @@ final class ProjectController extends AppController
     {
         $this->render('project', [
             'pageTitle' => 'Szczegóły projektu',
+            'workspaceSection' => '/projects',
             'projectId' => $id,
         ]);
     }

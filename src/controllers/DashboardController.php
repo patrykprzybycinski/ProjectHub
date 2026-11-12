@@ -11,6 +11,23 @@ final class DashboardController extends AppController
     {
         $this->render('dashboard', [
             'pageTitle' => 'Panel główny',
+            'workspaceSection' => '/dashboard',
+        ]);
+    }
+
+    public function tasks(): void
+    {
+        $this->render('tasks', [
+            'pageTitle' => 'Moje zadania',
+            'workspaceSection' => '/tasks',
+        ]);
+    }
+
+    public function time(): void
+    {
+        $this->render('time', [
+            'pageTitle' => 'Mój czas',
+            'workspaceSection' => '/time',
         ]);
     }
 

@@ -125,3 +125,113 @@ body:has(> .home-card) {
 .home-card a:hover {
     background: var(--color-primary-hover);
 }
+
+.workspace {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding: 0;
+}
+
+.workspace-sidebar {
+    padding: 1.5rem 1rem;
+    border-inline-end: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.workspace-brand {
+    display: inline-block;
+    margin-block-end: 1rem;
+    color: inherit;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.workspace-sidebar nav {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.workspace-sidebar nav a {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.workspace-sidebar nav a:hover,
+.workspace-sidebar nav a[aria-current="page"] {
+    background: var(--color-surface-muted);
+}
+
+.workspace-main {
+    padding: 3.75rem 1.5rem 1.5rem 0;
+}
+
+.workspace-main h1 {
+    margin-block-start: 0;
+}
+
+.workspace-card {
+    margin-block: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-surface);
+}
+
+.workspace-card h2 {
+    margin-block-start: 0;
+    font-size: 1rem;
+}
+
+.workspace-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: 0.75rem;
+}
+
+.workspace-stats dd {
+    margin: 0.25rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.workspace-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: start;
+}
+
+.workspace-table :is(th, td) {
+    padding: 0.5rem;
+    border-block-end: 1px solid var(--color-border);
+    text-align: start;
+}
+
+.workspace-timer {
+    font-size: 2rem;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 44rem) {
+    .workspace {
+        display: block;
+    }
+
+    .workspace-sidebar {
+        padding-inline-end: 4.5rem;
+        border-inline-end: 0;
+        border-block-end: 1px solid var(--color-border);
+    }
+
+    .workspace-sidebar nav {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .workspace-main {
+        padding: 1.25rem;
+    }
+}

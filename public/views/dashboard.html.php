@@ -1,14 +1,26 @@
-    <header>
-        <h1><?= htmlspecialchars($pageTitle) ?></h1>
-        <nav>
-            <a href="/">Strona główna</a>
-            <a href="/projects">Projekty</a>
-        </nav>
-    </header>
+<main class="workspace-main">
+    <h1>Panel główny</h1>
 
-    <main>
-        <section>
-            <h2>Twoje projekty</h2>
-            <p>Tutaj pojawi się lista projektów.</p>
-        </section>
-    </main>
+    <dl class="workspace-stats">
+        <div class="workspace-card">
+            <dt>Aktywne projekty</dt>
+            <dd>3</dd>
+        </div>
+        <div class="workspace-card">
+            <dt>Zadania w toku</dt>
+            <dd>4</dd>
+        </div>
+        <div class="workspace-card">
+            <dt>Czas w tygodniu</dt>
+            <dd>24 h</dd>
+        </div>
+    </dl>
+
+    <section class="workspace-card">
+        <h2>Ogłoszenia firmowe</h2>
+        <ul>
+            <li>Nowa wersja systemu — wdrożenie w piątek o 20:00.</li>
+            <li>Przerwa techniczna planowana na niedzielę.</li>
+        </ul>
+    </section>
+</main>

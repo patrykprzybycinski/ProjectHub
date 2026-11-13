@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/src/controllers/DefaultController.php';
+require_once dirname(__DIR__) . '/src/controllers/AuthController.php';
 require_once dirname(__DIR__) . '/src/controllers/ProjectController.php';
 require_once dirname(__DIR__) . '/src/controllers/DashboardController.php';
 require_once dirname(__DIR__) . '/Routing.php';
@@ -13,6 +14,10 @@ $routing = new Routing();
 $routing->get('/projects', ProjectController::class, 'index');
 $routing->get('/projects/{id}', ProjectController::class, 'show');
 $routing->get('/', DefaultController::class, 'index');
+$routing->get('/login', AuthController::class, 'showLogin');
+$routing->post('/login', AuthController::class, 'login');
+$routing->get('/register', AuthController::class, 'showRegister');
+$routing->post('/register', AuthController::class, 'register');
 $routing->get('/dashboard', DashboardController::class, 'index');
 $routing->get('/tasks', DashboardController::class, 'tasks');
 $routing->get('/time', DashboardController::class, 'time');

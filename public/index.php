@@ -18,14 +18,23 @@ session_start([
 ]);
 $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
 
-// Połączenie powstaje raz na żądanie, dopiero gdy potrzebne są projekty.
+// Połączenie powstaje raz na żądanie, dopiero gdy potrzebne są dane z bazy.
+$database = null;
+$getDatabase = static function () use (&$database): PDO {
+    return $database ??= (new Database())->connect();
+};
 $projectRepository = null;
-$getProjectRepository = static function () use (&$projectRepository): ProjectRepository {
-    return $projectRepository ??= new ProjectRepository((new Database())->connect());
+$getProjectRepository = static function () use (&$projectRepository, $getDatabase): ProjectRepository {
+    return $projectRepository ??= new ProjectRepository($getDatabase());
+};
+$userRepository = null;
+$getUserRepository = static function () use (&$userRepository, $getDatabase): UserRepository {
+    return $userRepository ??= new UserRepository($getDatabase());
 };
 
-$routing = new Routing(static function (string $class) use ($getProjectRepository): AppController {
+$routing = new Routing(static function (string $class) use ($getProjectRepository, $getUserRepository): AppController {
     return match ($class) {
+        AuthController::class => new AuthController($getUserRepository),
         ProjectController::class => new ProjectController($getProjectRepository()),
         WorkspaceApiController::class => new WorkspaceApiController($getProjectRepository),
         default => new $class(),

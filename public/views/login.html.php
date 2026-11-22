@@ -1,6 +1,10 @@
 <main class="home-card auth-card">
     <h1>Logowanie</h1>
 
+    <?php if ($registered): ?>
+        <p role="status">Konto zostało utworzone.</p>
+    <?php endif; ?>
+
     <form class="auth-form" method="post" action="/login">
         <div class="auth-field">
             <label for="email">Adres e-mail</label>

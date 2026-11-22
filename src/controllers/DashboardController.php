@@ -15,14 +15,6 @@ final class DashboardController extends AppController
         ]);
     }
 
-    public function tasks(): void
-    {
-        $this->render('tasks', [
-            'pageTitle' => 'Moje zadania',
-            'workspaceSection' => '/tasks',
-        ]);
-    }
-
     public function time(): void
     {
         $this->render('time', [

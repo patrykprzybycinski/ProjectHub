@@ -22,4 +22,19 @@ final class ProjectController extends AppController
             'projectId' => $id,
         ]);
     }
+
+    public function create(): void
+    {
+        $this->render('project-create', [
+            'pageTitle' => 'Nowy projekt',
+            'workspaceSection' => '/projects',
+        ]);
+    }
+
+    public function store(): void
+    {
+        http_response_code(501);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo 'Zapisywanie projektów będzie dostępne po podłączeniu bazy danych.';
+    }
 }

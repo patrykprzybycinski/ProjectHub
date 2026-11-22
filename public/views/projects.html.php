@@ -1,5 +1,6 @@
 <main class="workspace-main">
     <h1>Projekty</h1>
+    <p><a href="/projects/new">Nowy projekt</a></p>
 
     <div class="workspace-card">
         <table class="workspace-table">

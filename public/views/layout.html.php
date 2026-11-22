@@ -25,6 +25,9 @@
         })();
     </script>
     <link rel="stylesheet" href="/css/style.css">
+    <?php if (isset($workspaceSection)): ?>
+        <link rel="stylesheet" href="/css/workspace.css">
+    <?php endif; ?>
     <?php foreach ($stylesheets ?? [] as $stylesheet): ?>
         <link rel="stylesheet" href="<?= htmlspecialchars($stylesheet, ENT_QUOTES, 'UTF-8') ?>">
     <?php endforeach; ?>
@@ -44,23 +47,34 @@
     <?php if (isset($workspaceSection)): ?>
         <?php
         $navigation = [
-            '/dashboard' => 'Panel główny',
-            '/projects' => 'Projekty',
-            '/time' => 'Mój czas',
-            '/tasks' => 'Moje zadania',
+            '/dashboard' => ['Panel główny', 'fa-table-columns'],
+            '/projects' => ['Projekty', 'fa-folder'],
+            '/time' => ['Mój czas', 'fa-clock'],
+            '/tasks' => ['Moje zadania', 'fa-circle-check'],
         ];
         ?>
         <aside class="workspace-sidebar">
-            <a class="workspace-brand" href="/dashboard">ProjectHub</a>
+            <a class="workspace-brand" href="/dashboard">
+                <span class="workspace-brand-icon" aria-hidden="true"><i class="fa-solid fa-table-cells-large"></i></span>
+                ProjectHub
+            </a>
             <nav aria-label="Obszar roboczy">
-                <?php foreach ($navigation as $path => $label): ?>
+                <?php foreach ($navigation as $path => [$label, $icon]): ?>
                     <a href="<?= $path ?>"<?= $workspaceSection === $path ? ' aria-current="page"' : '' ?>>
+                        <i class="fa-solid <?= $icon ?>" aria-hidden="true"></i>
                         <?= $label ?>
                     </a>
                 <?php endforeach; ?>
             </nav>
         </aside>
+        <div class="workspace-body">
+            <header class="workspace-topbar">
+                <span>Obszar roboczy</span>
+            </header>
+            <?= $content ?>
+        </div>
+    <?php else: ?>
+        <?= $content ?>
     <?php endif; ?>
-    <?= $content ?>
 </body>
 </html>

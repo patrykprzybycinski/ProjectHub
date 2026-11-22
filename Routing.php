@@ -6,6 +6,10 @@ final class Routing
 {
     private array $routes = [];
 
+    public function __construct(private ?Closure $controllerFactory = null)
+    {
+    }
+
     public function get(string $path, string $controller, string $action): void
     {
         $this->add('GET', $path, $controller, $action);
@@ -79,7 +83,9 @@ final class Routing
             );
 
             $controllerClass = $route['controller'];
-            $controller = new $controllerClass();
+            $controller = $this->controllerFactory !== null
+                ? ($this->controllerFactory)($controllerClass, $route['action'])
+                : new $controllerClass();
 
             if (!$controller instanceof AppController) {
                 throw new \RuntimeException('Invalid controller');

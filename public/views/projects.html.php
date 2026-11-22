@@ -4,35 +4,28 @@
         <a class="workspace-action" href="/projects/new"><i class="fa-solid fa-plus" aria-hidden="true"></i> Nowy projekt</a>
     </header>
 
-    <div class="workspace-card workspace-table-card" role="region" aria-label="Lista projektów" tabindex="0">
-        <table class="workspace-table">
-            <thead>
-                <tr>
-                    <th scope="col">Nazwa projektu</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Postęp</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($projects as ['name' => $name, 'status' => $status, 'progress' => $progress, 'state' => $state, 'url' => $url]): ?>
+    <?php if ($projects === []): ?>
+        <p class="workspace-card">Brak projektów. Dodaj pierwszy projekt, aby rozpocząć.</p>
+    <?php else: ?>
+        <div class="workspace-card workspace-table-card" role="region" aria-label="Lista projektów" tabindex="0">
+            <table class="workspace-table">
+                <thead>
                     <tr>
-                        <th scope="row">
-                            <?php if ($url !== null): ?>
-                                <a href="<?= $url ?>"><?= $name ?></a>
-                            <?php else: ?>
-                                <?= $name ?>
-                            <?php endif; ?>
-                        </th>
-                        <td><span class="workspace-badge workspace-badge--<?= $state ?>"><?= $status ?></span></td>
-                        <td>
-                            <div class="workspace-progress">
-                                <progress aria-label="Postęp projektu <?= $name ?>" value="<?= $progress ?>" max="100"></progress>
-                                <span><?= $progress ?>%</span>
-                            </div>
-                        </td>
+                        <th scope="col">Nazwa projektu</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Data utworzenia</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($projects as $project): ?>
+                        <tr>
+                            <th scope="row"><a href="/projects/<?= $project->getId() ?>"><?= htmlspecialchars($project->getTitle(), ENT_QUOTES, 'UTF-8') ?></a></th>
+                            <td><span class="workspace-badge workspace-badge--<?= $project->getState() ?>"><?= $project->getStatusLabel() ?></span></td>
+                            <td><time datetime="<?= $project->getCreatedAt()->format(DATE_ATOM) ?>"><?= $project->getCreatedAt()->format('d.m.Y H:i') ?></time></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 </main>

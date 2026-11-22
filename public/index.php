@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/src/controllers/DefaultController.php';
 require_once dirname(__DIR__) . '/src/controllers/AuthController.php';
 require_once dirname(__DIR__) . '/src/controllers/ProjectController.php';
 require_once dirname(__DIR__) . '/src/controllers/TaskController.php';
+require_once dirname(__DIR__) . '/src/controllers/WorkspaceApiController.php';
 require_once dirname(__DIR__) . '/src/controllers/DashboardController.php';
 require_once dirname(__DIR__) . '/Routing.php';
 
@@ -26,6 +27,11 @@ $routing->get('/tasks', TaskController::class, 'index');
 $routing->get('/tasks/new', TaskController::class, 'create');
 $routing->post('/tasks', TaskController::class, 'store');
 $routing->get('/time', DashboardController::class, 'time');
+
+$routing->get('/api/projects', WorkspaceApiController::class, 'projects');
+$routing->post('/api/projects/search', WorkspaceApiController::class, 'searchProjects');
+$routing->get('/api/tasks', WorkspaceApiController::class, 'tasks');
+$routing->post('/api/tasks/search', WorkspaceApiController::class, 'searchTasks');
 
 $routeFound = $routing->dispatch(
     $_SERVER['REQUEST_METHOD'],

@@ -1,5 +1,6 @@
 <main class="workspace-main">
     <h1>Moje zadania</h1>
+    <p><a href="/tasks/new">Nowe zadanie</a></p>
 
     <section class="workspace-card">
         <h2>Bieżący sprint</h2>

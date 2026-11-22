@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/AppController.php';
+require_once dirname(__DIR__) . '/WorkspaceData.php';
 
 final class TaskController extends AppController
 {
@@ -11,6 +12,7 @@ final class TaskController extends AppController
         $this->render('tasks', [
             'pageTitle' => 'Moje zadania',
             'workspaceSection' => '/tasks',
+            'tasks' => WorkspaceData::TASKS,
         ]);
     }
 

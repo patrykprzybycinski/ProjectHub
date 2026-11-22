@@ -58,23 +58,37 @@ W lokalnym `.env` ustaw `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`,
 PHP otrzymuje zmienne `POSTGRES_*` z Docker Compose. Połączenie używa hosta
 `db` i wewnętrznego portu `5432`. Port `5433` służy klientom na komputerze hosta.
 
-`database/01-create-projects.sql` wykona się automatycznie przy pierwszej
-inicjalizacji bazy. Dla istniejącego wolumenu uruchom skrypt jednorazowo
-po uruchomieniu kontenerów. W PowerShell użyj poniższego polecenia.
-
-```powershell
-Get-Content -Raw -Encoding utf8 database/01-create-projects.sql | docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
-```
-
-W Git Bash możesz przekierować plik bezpośrednio.
+Uruchomienie środowiska wykonuje również brakujące migracje bazy.
 
 ```bash
-docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < database/01-create-projects.sql
+docker compose up -d --build
 ```
 
-Skrypt tworzy tabelę i indeksy w jednej transakcji. Kolejne wykonanie dla
-istniejącej tabeli zgłosi błąd. Zachowaj aktualne dane logowania istniejącego
-wolumenu w `.env`.
+Compose czeka na gotowość PostgreSQL, uruchamia usługę `migrate`, a po jej
+poprawnym zakończeniu uruchamia PHP. Migracje dotyczą zarówno nowej bazy,
+jak i istniejącego wolumenu. Pierwsze dwa skrypty tworzą tabele `projects`
+i `users`, jeżeli jeszcze ich brakuje, zachowując dotychczasowe rekordy.
+
+Tabela `schema_migrations` zapisuje nazwę pliku, sumę SHA-256 i datę wykonania.
+Każda migracja oraz jej wpis w historii są zapisywane w jednej transakcji.
+Błąd wycofuje bieżącą migrację i zatrzymuje uruchomienie zależnej usługi PHP.
+Blokada PostgreSQL chroni przed równoczesnym wykonaniem tych samych migracji.
+
+Dodawaj kolejne zmiany jako nowe pliki, np. `database/03-add-project-owner.sql`.
+Runner wykonuje je w kolejności numerów. Skrypty SQL korzystają z transakcji
+runnera. Umieszczaj w nich polecenia bez własnych `BEGIN` i `COMMIT`.
+Zachowuj wykonane pliki w repozytorium. Zmiana ich treści jest wykrywana
+przez sumy kontrolne. Przy przenoszeniu projektu pomiędzy systemami końce
+linii CRLF i LF są traktowane jednakowo.
+
+Logi oraz ręczne uruchomienie migracji są dostępne poniższymi poleceniami.
+
+```bash
+docker compose logs migrate
+docker compose run --rm migrate
+```
+
+Zachowaj aktualne dane logowania istniejącego wolumenu w `.env`.
 
 ```mermaid
 erDiagram
@@ -131,7 +145,9 @@ dla ukończonego projektu i `null` dla pozostałych statusów.
 ```text
 ProjectHub/
 ├── database/
-│   └── 01-create-projects.sql       # Tabela projects, ograniczenia i indeksy
+│   ├── 01-create-projects.sql       # Tabela projects, ograniczenia i indeksy
+│   ├── 02-create-users.sql          # Tabela użytkowników i unikalny e-mail
+│   └── migrate.php                  # Wersjonowanie i wykonywanie migracji
 ├── docker/
 │   ├── db/
 │   │   └── Dockerfile               # Obraz PostgreSQL 17

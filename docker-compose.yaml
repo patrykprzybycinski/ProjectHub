@@ -24,8 +24,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pg-data:/var/lib/postgresql/data
-      - ./docker/db:/docker-entrypoint-initdb.d
-      - ./database/01-create-projects.sql:/docker-entrypoint-initdb.d/01-create-projects.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 5s
@@ -34,11 +32,11 @@ services:
     networks:
       - pg-network
 
-  php:
+  migrate:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    environment:
+    environment: &database-environment
       DB_HOST: db
       DB_PORT: 5432
       POSTGRES_DB: ${POSTGRES_DB}
@@ -47,6 +45,21 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: ["php", "/app/database/migrate.php"]
+    restart: "no"
+    volumes:
+      - .:/app
+    networks:
+      - pg-network
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    environment: *database-environment
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     volumes:
       - .:/app
     networks:

@@ -1,6 +1,4 @@
-BEGIN;
-
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(150) NOT NULL,
     description TEXT NULL,
@@ -12,7 +10,5 @@ CREATE TABLE projects (
     CONSTRAINT projects_title_check CHECK (length(trim(title)) > 0)
 );
 
-CREATE INDEX projects_status_idx ON projects (status);
-CREATE INDEX projects_created_at_idx ON projects (created_at DESC);
-
-COMMIT;
+CREATE INDEX IF NOT EXISTS projects_status_idx ON projects (status);
+CREATE INDEX IF NOT EXISTS projects_created_at_idx ON projects (created_at DESC);

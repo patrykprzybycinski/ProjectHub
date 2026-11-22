@@ -20,4 +20,9 @@ final class DefaultController extends AppController
             'pageTitle' => 'Nie znaleziono strony',
         ]);
     }
+
+    public function serverError(): void
+    {
+        $this->render('server-error', ['pageTitle' => 'Błąd serwera']);
+    }
 }

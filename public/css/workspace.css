@@ -162,6 +162,10 @@ html[data-theme="dark"] .workspace {
     color: var(--color-on-primary);
     font-weight: 650;
     text-decoration: none;
+    border: 0;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .workspace-action:hover {
@@ -414,6 +418,56 @@ html[data-theme="dark"] .workspace {
 .workspace-duration {
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+}
+
+.project-form,
+.project-field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.project-form {
+    max-width: 44rem;
+    margin-top: 1.5rem;
+    gap: 1.25rem;
+}
+
+.project-field label {
+    font-weight: 650;
+}
+
+.project-field :is(input, textarea, select) {
+    width: 100%;
+    min-width: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--color-control-border);
+    border-radius: 0.5rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+}
+
+.project-field textarea {
+    resize: vertical;
+}
+
+.project-field :is(textarea, select):focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+}
+
+.project-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.project-metadata dt {
+    color: var(--workspace-muted);
+}
+
+.project-metadata dd {
+    margin: 0.5rem 0 0;
 }
 
 @media (max-width: 28rem) {

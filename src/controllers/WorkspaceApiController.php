@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/AppController.php';
 require_once dirname(__DIR__) . '/WorkspaceData.php';
+require_once dirname(__DIR__) . '/repositories/ProjectRepository.php';
 
 final class WorkspaceApiController extends AppController
 {
+    public function __construct(private Closure $getProjectRepository)
+    {
+    }
+
     public function projects(): void
     {
-        $this->respond(WorkspaceData::PROJECTS);
+        $this->respond($this->projectData());
     }
 
     public function tasks(): void
@@ -19,7 +24,7 @@ final class WorkspaceApiController extends AppController
 
     public function searchProjects(): void
     {
-        $this->search(WorkspaceData::PROJECTS, 'name');
+        $this->search($this->projectData(), 'name');
     }
 
     public function searchTasks(): void
@@ -48,5 +53,22 @@ final class WorkspaceApiController extends AppController
         http_response_code($status);
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+    }
+
+    private function projectData(): array
+    {
+        $repository = ($this->getProjectRepository)();
+        return array_map(static fn (Project $project): array => [
+            'id' => $project->getId(),
+            'name' => $project->getTitle(),
+            'description' => $project->getDescription(),
+            'status' => $project->getStatusLabel(),
+            'statusCode' => $project->getStatus(),
+            'progress' => $project->getStatus() === 'completed' ? 100 : null,
+            'state' => $project->getState(),
+            'url' => '/projects/' . $project->getId(),
+            'createdAt' => $project->getCreatedAt()?->format(DATE_ATOM),
+            'updatedAt' => $project->getUpdatedAt()?->format(DATE_ATOM),
+        ], $repository->findAll());
     }
 }
